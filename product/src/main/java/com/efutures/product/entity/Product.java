@@ -90,7 +90,6 @@ public class Product extends AuditModel {
     private Date launchDate;
 
     @Transient
-//    @NotBlank(message = "product category id is mandatory")
     private Long categoryId;
 
     public Product(String productName,
