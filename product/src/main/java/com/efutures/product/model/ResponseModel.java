@@ -7,11 +7,11 @@ import lombok.Setter;
 public class ResponseModel {
     private String status;
     private String message;
-    private Object responseObject;
+    private Object response;
 
-    public ResponseModel(String status, String message, Object responseObject) {
+    public ResponseModel(String status, String message, Object response) {
         this.status = status;
         this.message = message;
-        this.responseObject = responseObject;
+        this.response = response;
     }
 }

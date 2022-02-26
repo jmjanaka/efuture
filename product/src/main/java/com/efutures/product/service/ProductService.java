@@ -4,6 +4,8 @@ import com.efutures.product.exception.ProductValidateException;
 import com.efutures.product.entity.Product;
 import com.efutures.product.model.ProductModel;
 
+import java.beans.IntrospectionException;
+import java.util.Collection;
 import java.util.List;
 
 public interface ProductService {
@@ -36,7 +38,7 @@ public interface ProductService {
      * @return
      * @throws ProductValidateException
      */
-    public List<ProductModel> getProductListByCategoryName(String categoryName) throws ProductValidateException;
+    public Collection<ProductModel> getProductListByCategoryName(String categoryName) throws ProductValidateException, IntrospectionException, InstantiationException, IllegalAccessException;
 
 
 }

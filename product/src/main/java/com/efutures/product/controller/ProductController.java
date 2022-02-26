@@ -6,6 +6,8 @@ import com.efutures.product.exception.ProductValidateException;
 import com.efutures.product.model.ProductModel;
 import com.efutures.product.model.ResponseModel;
 import com.efutures.product.service.ProductService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +24,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/product")
 public class ProductController {
+
+    protected Logger logger = LoggerFactory.getLogger(getClass());
 
     private final ProductService productService;
 
@@ -80,13 +85,15 @@ public class ProductController {
     public ResponseEntity<?> getProductListByCategoryName(@RequestParam String categoryName) {
 
         try {
-            List<ProductModel> products = productService.getProductListByCategoryName(categoryName);
+            Collection<ProductModel> products = productService.getProductListByCategoryName(categoryName);
             return new ResponseEntity<Object>(new ResponseModel("success", "Successfully got the product list", products), HttpStatus.OK);
 
         } catch (ProductValidateException productValidateException){
+            logger.error("Error occurred in productList ", productValidateException);
             return new ResponseEntity<Object>(new ResponseModel("validate-failure", productValidateException.getMessage(), productValidateException.getMessage()), HttpStatus.OK);
 
         }catch (Exception ex) {
+            logger.error("Error occurred in productList ", ex);
             return new ResponseEntity<Object>(new ResponseModel("error", "Error occurred when product getting", ex.getMessage()), HttpStatus.OK);
         }
     }

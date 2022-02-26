@@ -8,10 +8,17 @@ import com.efutures.product.exception.ProductValidateException;
 import com.efutures.product.model.ProductModel;
 import com.efutures.product.repository.CategoryRepository;
 import com.efutures.product.repository.ProductRepository;
+import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 @Service
@@ -111,12 +118,59 @@ public class ProductServiceImpl implements ProductService{
      * @throws ProductValidateException
      */
     @Override
-    public List<ProductModel> getProductListByCategoryName(String categoryName) throws ProductValidateException {
+    public Collection<ProductModel> getProductListByCategoryName(String categoryName) throws ProductValidateException, InstantiationException, IllegalAccessException, IntrospectionException {
         if (categoryName == null || categoryName.isEmpty())
             throw new ProductValidateException("product category must be entered.");
 
-        return productRepository.getProductListByCategoryName(categoryName);
+        /*List<Map<String, Object>> mapList = productRepository.findProductModelByCategoryName(categoryName);
+        List<ProductModel> list = new ArrayList<>(mapList.size());
+        for (Map<String, Object> map : mapList) {
+            ProductModel productModel = new ProductModel();
+            copyProperties(map, productModel);
+            list.add(productModel);
+        }
+        return list;*/
+
+        return productRepository.findProductModelByCategoryName(categoryName);
     }
 
+    public static void copyProperties(Map<String,Object> map, Object target) throws IntrospectionException {
+        if(map == null || target == null || map.isEmpty()){
+            return;
+        }
+        Class<?> actualEditable = target.getClass();
+        PropertyDescriptor[] targetPds = Introspector.getBeanInfo(actualEditable).getPropertyDescriptors();
+        for (PropertyDescriptor targetPd : targetPds) {
+            if(targetPd.getWriteMethod() == null) {
+                continue;
+            }
+            try {
+                String key = targetPd.getName();
+                Object value = map.get(key);
+                // Aquí se juzga si el siguiente valor está vacío
+                setValue(target, targetPd, value);
+            } catch (Exception ex) {
+                throw new FatalBeanException("Could not copy properties from source to target", ex);
+            }
+        }
+    }
+    /**
+     * Set Values
+     * @param target
+     * @param targetPd
+     * @param value
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
+    private static void setValue(Object target, PropertyDescriptor targetPd, Object value) throws IllegalAccessException, InvocationTargetException {
+        // Aquí se juzga si el siguiente valor está vacío
+        if (value != null) {
+            Method writeMethod = targetPd.getWriteMethod();
+            if (!Modifier.isPublic(writeMethod.getDeclaringClass().getModifiers())) {
+                writeMethod.setAccessible(true);
+            }
+            writeMethod.invoke(target, value);
+        }
+    }
 
 }

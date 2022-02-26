@@ -8,7 +8,7 @@ import javax.persistence.FieldResult;
 import javax.persistence.SqlResultSetMapping;
 
 @Getter @Setter
-/*@SqlResultSetMapping(
+@SqlResultSetMapping(
         name = "productModel",
         entities = {
 @EntityResult(
@@ -20,7 +20,7 @@ import javax.persistence.SqlResultSetMapping;
         }
 )
 }
-        )*/
+        )
 
 public class ProductModel {
     private String productName;
