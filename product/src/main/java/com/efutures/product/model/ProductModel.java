@@ -4,9 +4,7 @@ import com.efutures.product.entity.Comment;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.EntityResult;
-import javax.persistence.FieldResult;
-import javax.persistence.SqlResultSetMapping;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter @Setter
@@ -15,6 +13,8 @@ public class ProductModel {
     private String productName;
     private String productDescription;
     private String categoryName;
+    private BigDecimal price;
+    private String productStatus;
     private List<Comment> commentList;
 
 

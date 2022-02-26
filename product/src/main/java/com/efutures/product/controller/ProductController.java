@@ -15,6 +15,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -98,6 +99,26 @@ public class ProductController {
 
         }catch (Exception ex) {
             logger.error("Error occurred in get productList ", ex);
+            return new ResponseEntity<Object>(new ResponseModel("error", "Error occurred when product getting", ex.getMessage()), HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/premiumProductList")
+    public ResponseEntity<?> getPremiumProductList(@RequestParam BigDecimal price) {
+
+        try {
+            Collection<ProductModel> products = productService.getProductListByPrice(price);
+            return new ResponseEntity<Object>(new ResponseModel("success", "Successfully got the product list", products), HttpStatus.OK);
+
+        } catch (ProductValidateException productValidateException){
+            logger.error("validation fired in get premium product ", productValidateException);
+            return new ResponseEntity<Object>(new ResponseModel("validate-failure", productValidateException.getMessage(), productValidateException.getMessage()), HttpStatus.OK);
+
+        }catch (NumberFormatException numberFormatException){
+            return new ResponseEntity<Object>(new ResponseModel("validate-failure", "Invalid price", numberFormatException.getMessage()), HttpStatus.OK);
+        }
+        catch (Exception ex) {
+            logger.error("Error occurred in get premium product ", ex);
             return new ResponseEntity<Object>(new ResponseModel("error", "Error occurred when product getting", ex.getMessage()), HttpStatus.OK);
         }
     }

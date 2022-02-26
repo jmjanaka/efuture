@@ -1,5 +1,6 @@
 package com.efutures.product.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class Category {
     private Long categoryId;
 
     @ManyToMany(mappedBy = "categories", cascade = { CascadeType.ALL })
+    @JsonIgnore
     private Set<Product> products = new HashSet<>();
 
     public void setProducts(Set<Product> products){

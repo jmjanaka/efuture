@@ -4,6 +4,7 @@ import com.efutures.product.model.AuditModel;
 import com.efutures.product.entity.Category;
 import com.efutures.product.entity.Comment;
 import com.efutures.product.model.ProductModel;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,6 +39,7 @@ public class Product extends AuditModel {
             inverseJoinColumns = {
             @JoinColumn(name = "category_id")
             })
+    @JsonIgnore
     Set<Category> categories = new HashSet<>();
     public void setCategories(Set<Category> categories){
         for (Category category : categories){
@@ -52,6 +54,7 @@ public class Product extends AuditModel {
 
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @JsonIgnore
     private Set<Comment> comments;
 
     public void setComments(Set<Comment> comments){

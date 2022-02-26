@@ -21,6 +21,7 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -142,6 +143,32 @@ public class ProductServiceImpl implements ProductService{
         }
         return list;
 
+    }
+
+    /**
+     * @param price the premium price
+     * @return
+     * @throws ProductValidateException
+     * @throws IntrospectionException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
+    @Override
+    public Collection<ProductModel> getProductListByPrice(BigDecimal price) throws ProductValidateException, IntrospectionException, InstantiationException, IllegalAccessException {
+        if (price == null || price.compareTo(BigDecimal.ZERO) == 0)
+            throw new ProductValidateException("price must be valid.");
+
+        List<Map<String, Object>> mapList = productRepository.findProductModelByPrice(price);
+        List<ProductModel> list = new ArrayList<>(mapList.size());
+        for (Map<String, Object> map : mapList) {
+            ProductModel productModel = new ProductModel();
+            copyProperties(map, productModel);
+            Optional<Product> product = productRepository.findByProductName(productModel.getProductName());
+            List<Comment> commentList = commentRepository.findByProduct(product);
+            productModel.setCommentList(commentList);
+            list.add(productModel);
+        }
+        return list;
     }
 
     public static void copyProperties(Map<String,Object> map, Object target) throws IntrospectionException {
