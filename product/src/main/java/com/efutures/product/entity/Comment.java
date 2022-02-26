@@ -26,6 +26,10 @@ public class Comment {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    public Product getProduct(){
+        return product;
+    }
+
     @Column(name = "comment")
     private String comment;
 

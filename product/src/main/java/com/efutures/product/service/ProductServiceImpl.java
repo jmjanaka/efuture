@@ -70,6 +70,7 @@ public class ProductServiceImpl implements ProductService{
                 throw new ProductValidateException("product already exist, please use another product name to update");
         }
         Optional<Product> fetchedProduct = productRepository.findById(product.getProductId());
+        Product product1 = new Product();
 
         if (fetchedProduct.isPresent()){
 
@@ -79,13 +80,13 @@ public class ProductServiceImpl implements ProductService{
             newProduct.setPrice(product.getPrice());
             newProduct.setStatus(product.getStatus());
             newProduct.setCategories(fetchedProduct.get().getCategories());
+            System.out.println("fetchedProduct.get().getCategories() is "+ fetchedProduct.get().getCategories());
             newProduct.setComments(product.getComments() == null ? new HashSet<>():product.getComments());
 
-            productRepository.save(newProduct);
-
+            product1 = productRepository.save(newProduct);
 
         }
-        return productRepository.save(product);
+        return product1;
     }
 
     /**

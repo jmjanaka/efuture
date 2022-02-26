@@ -46,6 +46,10 @@ public class Product extends AuditModel {
         }
     }
 
+    public Set<Category> getCategories(){
+        return categories;
+    }
+
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     private Set<Comment> comments;
@@ -54,6 +58,10 @@ public class Product extends AuditModel {
         for (Comment comment : comments){
             this.comments.add(comment);
         }
+    }
+
+    public Set<Comment> getComments(){
+        return comments;
     }
 
     @NotBlank(message = "Name is mandatory")
