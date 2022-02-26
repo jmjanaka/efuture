@@ -39,9 +39,22 @@ public class Product extends AuditModel {
             @JoinColumn(name = "category_id")
             })
     Set<Category> categories = new HashSet<>();
+    public void setCategories(Set<Category> categories){
+        for (Category category : categories){
+            category.getProducts().add(this);
+            this.categories.add(category);
+        }
+    }
+
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
-    private Set<Comment> comment;
+    private Set<Comment> comments;
+
+    public void setComments(Set<Comment> comments){
+        for (Comment comment : comments){
+            this.comments.add(comment);
+        }
+    }
 
     @NotBlank(message = "Name is mandatory")
     @Column(name ="product_name")
@@ -73,12 +86,16 @@ public class Product extends AuditModel {
                    String productDescription,
                    BigDecimal price,
                    String status,
-                   Date launchDate) {
+                   Date launchDate,
+                   Set<Category> categories,
+                   Set<Comment> comments) {
         this.productName = productName;
         this.productDescription = productDescription;
         this.price = price;
         this.status = status;
         this.launchDate = launchDate;
+        setCategories(categories);
+        setComments(comments);
     }
 
 

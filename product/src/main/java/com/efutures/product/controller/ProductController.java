@@ -1,6 +1,5 @@
 package com.efutures.product.controller;
 
-import com.efutures.product.entity.Comment;
 import com.efutures.product.entity.Product;
 import com.efutures.product.exception.ProductValidateException;
 import com.efutures.product.model.ProductModel;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -42,9 +40,11 @@ public class ProductController {
             return new ResponseEntity<Object>(new ResponseModel("success", "Successfully created the new product", null), HttpStatus.OK);
 
         } catch (ProductValidateException productValidateException){
+            logger.error("validation fired when creating product", productValidateException);
             return new ResponseEntity<Object>(new ResponseModel("validate-failure", productValidateException.getMessage(), productValidateException.getMessage()), HttpStatus.OK);
 
         }catch (Exception ex) {
+            logger.error("Error occurred when creating product: ", ex);
             return new ResponseEntity<Object>(new ResponseModel("error", "Error occurred when product creating", ex.getMessage()), HttpStatus.OK);
         }
     }
@@ -57,9 +57,11 @@ public class ProductController {
             return new ResponseEntity<Object>(new ResponseModel("success", "Successfully updated the product details", null), HttpStatus.OK);
 
         } catch (ProductValidateException productValidateException){
+            logger.error("validation fired when updating product :", productValidateException);
             return new ResponseEntity<Object>(new ResponseModel("validate-failure", productValidateException.getMessage(), productValidateException.getMessage()), HttpStatus.CONFLICT);
 
         }catch (Exception ex) {
+            logger.error("Error occurred when updating product :", ex);
             return new ResponseEntity<Object>(new ResponseModel("error", "Error occurred when product updating", ex.getMessage()), HttpStatus.OK);
         }
     }
@@ -73,10 +75,12 @@ public class ProductController {
             return new ResponseEntity<Object>(new ResponseModel("success", "Successfully deleted the product", null), HttpStatus.OK);
 
         }catch (ProductValidateException productValidateException){
+            logger.error("validation fired when deleting product :", productValidateException);
             return new ResponseEntity<Object>(new ResponseModel("validate-failure", "Error occurred when deleting an item",
                     productValidateException.getMessage()), HttpStatus.OK);
         }
         catch (Exception ex) {
+            logger.error("Error occurred when deleting product :", ex);
             return new ResponseEntity<Object>(new ResponseModel("error", "Error occurred when product deleting", ex.getMessage()), HttpStatus.OK);
         }
     }
@@ -89,11 +93,11 @@ public class ProductController {
             return new ResponseEntity<Object>(new ResponseModel("success", "Successfully got the product list", products), HttpStatus.OK);
 
         } catch (ProductValidateException productValidateException){
-            logger.error("Error occurred in productList ", productValidateException);
+            logger.error("validation fired in get productList ", productValidateException);
             return new ResponseEntity<Object>(new ResponseModel("validate-failure", productValidateException.getMessage(), productValidateException.getMessage()), HttpStatus.OK);
 
         }catch (Exception ex) {
-            logger.error("Error occurred in productList ", ex);
+            logger.error("Error occurred in get productList ", ex);
             return new ResponseEntity<Object>(new ResponseModel("error", "Error occurred when product getting", ex.getMessage()), HttpStatus.OK);
         }
     }

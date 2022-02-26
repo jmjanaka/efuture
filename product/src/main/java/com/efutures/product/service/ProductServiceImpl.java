@@ -7,7 +7,9 @@ import com.efutures.product.enums.ProductStatus;
 import com.efutures.product.exception.ProductValidateException;
 import com.efutures.product.model.ProductModel;
 import com.efutures.product.repository.CategoryRepository;
+import com.efutures.product.repository.CommentRepository;
 import com.efutures.product.repository.ProductRepository;
+import com.sun.xml.bind.v2.model.core.EnumLeafInfo;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,12 +30,15 @@ public class ProductServiceImpl implements ProductService{
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final CommentRepository commentRepository;
 
     @Autowired
     public ProductServiceImpl(ProductRepository productRepository,
-                              CategoryRepository categoryRepository) {
+                              CategoryRepository categoryRepository,
+                              CommentRepository commentRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.commentRepository = commentRepository;
     }
 
     @Override
@@ -73,6 +78,8 @@ public class ProductServiceImpl implements ProductService{
             newProduct.setProductDescription(product.getProductDescription());
             newProduct.setPrice(product.getPrice());
             newProduct.setStatus(product.getStatus());
+            newProduct.setCategories(fetchedProduct.get().getCategories());
+            newProduct.setComments(product.getComments() == null ? new HashSet<>():product.getComments());
 
             productRepository.save(newProduct);
 
@@ -105,7 +112,7 @@ public class ProductServiceImpl implements ProductService{
             setComment.add(newComment);
 
             newProduct.setStatus(ProductStatus.DELETED.getCode());
-            newProduct.setComment(setComment);
+            newProduct.setComments(setComment);
             productRepository.save(newProduct);
             productRepository.flush();
         }else
@@ -127,6 +134,9 @@ public class ProductServiceImpl implements ProductService{
         for (Map<String, Object> map : mapList) {
             ProductModel productModel = new ProductModel();
             copyProperties(map, productModel);
+            Optional<Product> product = productRepository.findByProductName(productModel.getProductName());
+            List<Comment> commentList = commentRepository.findByProduct(product);
+            productModel.setCommentList(commentList);
             list.add(productModel);
         }
         return list;
