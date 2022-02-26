@@ -42,11 +42,13 @@ public class ProductController {
 
         } catch (ProductValidateException productValidateException){
             logger.error("validation fired when creating product", productValidateException);
-            return new ResponseEntity<Object>(new ResponseModel("validate-failure", productValidateException.getMessage(), productValidateException.getMessage()), HttpStatus.OK);
+            return new ResponseEntity<Object>(new ResponseModel("validate-failure", productValidateException.getMessage(),
+                    productValidateException.getMessage()), HttpStatus.OK);
 
         }catch (Exception ex) {
             logger.error("Error occurred when creating product: ", ex);
-            return new ResponseEntity<Object>(new ResponseModel("error", "Error occurred when product creating", ex.getMessage()), HttpStatus.OK);
+            return new ResponseEntity<Object>(new ResponseModel("error", "Error occurred when product creating",
+                    ex.getMessage()), HttpStatus.OK);
         }
     }
 
@@ -55,15 +57,18 @@ public class ProductController {
 
         try {
             productService.updateProduct(product);
-            return new ResponseEntity<Object>(new ResponseModel("success", "Successfully updated the product details", null), HttpStatus.OK);
+            return new ResponseEntity<Object>(new ResponseModel("success", "Successfully updated the product details",
+                    null), HttpStatus.OK);
 
         } catch (ProductValidateException productValidateException){
             logger.error("validation fired when updating product :", productValidateException);
-            return new ResponseEntity<Object>(new ResponseModel("validate-failure", productValidateException.getMessage(), productValidateException.getMessage()), HttpStatus.CONFLICT);
+            return new ResponseEntity<Object>(new ResponseModel("validate-failure", productValidateException.getMessage(),
+                    productValidateException.getMessage()), HttpStatus.CONFLICT);
 
         }catch (Exception ex) {
             logger.error("Error occurred when updating product :", ex);
-            return new ResponseEntity<Object>(new ResponseModel("error", "Error occurred when product updating", ex.getMessage()), HttpStatus.OK);
+            return new ResponseEntity<Object>(new ResponseModel("error", "Error occurred when product updating",
+                    ex.getMessage()), HttpStatus.OK);
         }
     }
 
@@ -73,7 +78,8 @@ public class ProductController {
 
         try {
             productService.deleteProduct(productId, comment);
-            return new ResponseEntity<Object>(new ResponseModel("success", "Successfully deleted the product", null), HttpStatus.OK);
+            return new ResponseEntity<Object>(new ResponseModel("success", "Successfully deleted the product",
+                    null), HttpStatus.OK);
 
         }catch (ProductValidateException productValidateException){
             logger.error("validation fired when deleting product :", productValidateException);
@@ -82,7 +88,8 @@ public class ProductController {
         }
         catch (Exception ex) {
             logger.error("Error occurred when deleting product :", ex);
-            return new ResponseEntity<Object>(new ResponseModel("error", "Error occurred when product deleting", ex.getMessage()), HttpStatus.OK);
+            return new ResponseEntity<Object>(new ResponseModel("error", "Error occurred when product deleting",
+                    ex.getMessage()), HttpStatus.OK);
         }
     }
 
@@ -91,15 +98,18 @@ public class ProductController {
 
         try {
             Collection<ProductModel> products = productService.getProductListByCategoryName(categoryName);
-            return new ResponseEntity<Object>(new ResponseModel("success", "Successfully got the product list", products), HttpStatus.OK);
+            return new ResponseEntity<Object>(new ResponseModel("success", "Successfully got the product list",
+                    products), HttpStatus.OK);
 
         } catch (ProductValidateException productValidateException){
             logger.error("validation fired in get productList ", productValidateException);
-            return new ResponseEntity<Object>(new ResponseModel("validate-failure", productValidateException.getMessage(), productValidateException.getMessage()), HttpStatus.OK);
+            return new ResponseEntity<Object>(new ResponseModel("validate-failure", productValidateException.getMessage(),
+                    productValidateException.getMessage()), HttpStatus.OK);
 
         }catch (Exception ex) {
             logger.error("Error occurred in get productList ", ex);
-            return new ResponseEntity<Object>(new ResponseModel("error", "Error occurred when product getting", ex.getMessage()), HttpStatus.OK);
+            return new ResponseEntity<Object>(new ResponseModel("error", "Error occurred when product getting",
+                    ex.getMessage()), HttpStatus.OK);
         }
     }
 
@@ -108,18 +118,22 @@ public class ProductController {
 
         try {
             Collection<ProductModel> products = productService.getProductListByPrice(price);
-            return new ResponseEntity<Object>(new ResponseModel("success", "Successfully got the product list", products), HttpStatus.OK);
+            return new ResponseEntity<Object>(new ResponseModel("success", "Successfully got the product list",
+                    products), HttpStatus.OK);
 
         } catch (ProductValidateException productValidateException){
             logger.error("validation fired in get premium product ", productValidateException);
-            return new ResponseEntity<Object>(new ResponseModel("validate-failure", productValidateException.getMessage(), productValidateException.getMessage()), HttpStatus.OK);
+            return new ResponseEntity<Object>(new ResponseModel("validate-failure", productValidateException.getMessage(),
+                    productValidateException.getMessage()), HttpStatus.OK);
 
         }catch (NumberFormatException numberFormatException){
-            return new ResponseEntity<Object>(new ResponseModel("validate-failure", "Invalid price", numberFormatException.getMessage()), HttpStatus.OK);
+            return new ResponseEntity<Object>(new ResponseModel("validate-failure", "Invalid price",
+                    numberFormatException.getMessage()), HttpStatus.OK);
         }
         catch (Exception ex) {
             logger.error("Error occurred in get premium product ", ex);
-            return new ResponseEntity<Object>(new ResponseModel("error", "Error occurred when product getting", ex.getMessage()), HttpStatus.OK);
+            return new ResponseEntity<Object>(new ResponseModel("error", "Error occurred when product getting",
+                    ex.getMessage()), HttpStatus.OK);
         }
     }
 
@@ -134,7 +148,8 @@ public class ProductController {
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
-        return new ResponseEntity<Object>(new ResponseModel("validate-failure", "Error occurred when validating data", errors), HttpStatus.UNPROCESSABLE_ENTITY);
+        return new ResponseEntity<Object>(new ResponseModel("validate-failure", "Error occurred when validating data",
+                errors), HttpStatus.UNPROCESSABLE_ENTITY);
 
     }
 }
