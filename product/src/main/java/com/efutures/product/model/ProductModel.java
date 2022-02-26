@@ -8,19 +8,6 @@ import javax.persistence.FieldResult;
 import javax.persistence.SqlResultSetMapping;
 
 @Getter @Setter
-@SqlResultSetMapping(
-        name = "productModel",
-        entities = {
-@EntityResult(
-        entityClass = ProductModel.class, // The name of the class
-        fields = {
-                @FieldResult(name = "productName", column = "product_name"),
-                @FieldResult(name = "productDescription", column = "product_description"),
-                @FieldResult(name = "categoryName", column = "category_name")
-        }
-)
-}
-        )
 
 public class ProductModel {
     private String productName;
@@ -29,9 +16,4 @@ public class ProductModel {
 //    private List<Comment> commentList;
 
 
-    public ProductModel(String productName, String productDescription, String categoryName) {
-        this.productName = productName;
-        this.productDescription = productDescription;
-        this.categoryName = categoryName;
-    }
 }

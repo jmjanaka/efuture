@@ -122,16 +122,15 @@ public class ProductServiceImpl implements ProductService{
         if (categoryName == null || categoryName.isEmpty())
             throw new ProductValidateException("product category must be entered.");
 
-        /*List<Map<String, Object>> mapList = productRepository.findProductModelByCategoryName(categoryName);
+        List<Map<String, Object>> mapList = productRepository.findProductModelByCategoryName(categoryName);
         List<ProductModel> list = new ArrayList<>(mapList.size());
         for (Map<String, Object> map : mapList) {
             ProductModel productModel = new ProductModel();
             copyProperties(map, productModel);
             list.add(productModel);
         }
-        return list;*/
+        return list;
 
-        return productRepository.findProductModelByCategoryName(categoryName);
     }
 
     public static void copyProperties(Map<String,Object> map, Object target) throws IntrospectionException {
