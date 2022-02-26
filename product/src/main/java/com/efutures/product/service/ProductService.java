@@ -1,14 +1,12 @@
 package com.efutures.product.service;
 
-import com.efutures.product.entity.Category;
-import com.efutures.product.exception.ProductValidateException;
 import com.efutures.product.entity.Product;
+import com.efutures.product.exception.ProductValidateException;
 import com.efutures.product.model.ProductModel;
 
 import java.beans.IntrospectionException;
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.List;
 
 public interface ProductService {
     /**
